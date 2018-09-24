@@ -14,7 +14,6 @@ const reminders = ( state = [], action = {} ) => {
                 ...state,
                 reminder(action)
             ]
-
         default: return state;
     }
 }

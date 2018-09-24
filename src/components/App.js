@@ -6,13 +6,13 @@ import { addReminder} from "../actions";
 
 class App extends Component {
   state = {
-      text: ""
-  };
+      text: ''
+  }
 
   handleChange(e)  {
       this.setState({
         text: e.target.value
-  });
+    });
   }
 
   addReminder() {
@@ -23,7 +23,6 @@ class App extends Component {
     return (
       <div className="App">
           <div className="title">Reminder Pro</div>
-
           <div className="form-inline">
               <div className="form-group mr-2">
                   <input
