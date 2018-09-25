@@ -1,22 +1,39 @@
 import React, { Component } from 'react';
 import '../App.css';
 import { connect } from 'react-redux';
-import { addReminder} from "../actions";
+import { addReminder, deleteReminder, cleanReminders } from "../actions";
+import PropTypes from 'prop-types';
+import moment from 'moment';
 
 
 class App extends Component {
   state = {
-      text: ''
+      text: '',
+      dueDate: ''
   }
 
-  handleChange(e)  {
+  handleInput(e)  {
       this.setState({
         text: e.target.value
     });
   }
 
+  handleDate(e) {
+      this.setState({
+          dueDate: e.target.value
+      });
+  }
+
+  deleteReminder(id) {
+      this.props.deleteReminder(id);
+  }
+
   addReminder() {
-      this.props.addReminder(this.state.text);
+      this.props.addReminder(this.state.text, this.state.dueDate);
+  }
+
+  cleanReminders() {
+      this.props.cleanReminders();
   }
 
   renderReminders() {
@@ -29,7 +46,12 @@ class App extends Component {
                           <li key={reminder.id} className="list-group-item">
                               <div className="list-item">
                                   <div>{ reminder.text }</div>
-                                  <div><em>time</em></div>
+                                  <div><em>{ moment(new Date(reminder.dueDate)).fromNow() }</em></div>
+                              </div>
+                              <div
+                                  className="list-item delete-button"
+                                  onClick={ (e) => this.deleteReminder(reminder.id)}
+                              >&#x2715;
                               </div>
                           </li>
                       );
@@ -47,9 +69,14 @@ class App extends Component {
               <div className="form-group mr-2">
                   <input
                       type="text"
-                      className="form-control"
+                      className="form-control mr-2"
                       placeholder="Please enter ..."
-                      onChange={ (e) => {this.handleChange(e)}}
+                      onChange={ (e) => {this.handleInput(e)}}
+                  />
+                  <input
+                      type="datetime-local"
+                      className="form-control mr-2"
+                      onChange={ (e) => {this.handleDate(e)}}
                   />
               </div>
               <button
@@ -61,6 +88,12 @@ class App extends Component {
               </button>
           </div>
           { this.renderReminders() }
+          <div
+              className="btn btn-danger mt-3"
+              onClick={() => this.cleanReminders() }
+          >
+              Clear Reminder
+          </div>
       </div>
     );
   }
@@ -72,4 +105,11 @@ const mapStateToProps = (state) => {
     };
 }
 
-export default connect(mapStateToProps, { addReminder })(App);
+App.propTypes = {
+    reminders: PropTypes.array.isRequired,
+    addReminder: PropTypes.func.isRequired,
+    deleteReminder: PropTypes.func.isRequired,
+    cleanReminders: PropTypes.func.isRequired
+}
+
+export default connect(mapStateToProps, { addReminder, deleteReminder, cleanReminders })(App);
