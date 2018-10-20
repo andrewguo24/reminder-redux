@@ -1,26 +1,24 @@
 import React, { Component } from 'react';
-import '../App.css';
-import { connect } from 'react-redux';
-import { addReminder, deleteReminder, cleanReminders } from "../actions";
+import '../App.scss';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
 
 class App extends Component {
   state = {
-      text: '',
-      dueDate: ''
-  }
+      event: '',
+      date: ''
+  };
 
   handleInput(e)  {
       this.setState({
-        text: e.target.value
+        event: e.target.value
     });
   }
 
   handleDate(e) {
       this.setState({
-          dueDate: e.target.value
+          date: e.target.value
       });
   }
 
@@ -29,7 +27,7 @@ class App extends Component {
   }
 
   addReminder() {
-      this.props.addReminder(this.state.text, this.state.dueDate);
+      this.props.addReminder(this.state.event, this.state.date);
   }
 
   cleanReminders() {
@@ -41,16 +39,16 @@ class App extends Component {
       return (
           <ul className="list-group col-sm-8 mt-2">
               {
-                  reminders.map(reminder => {
+                  reminders && reminders.map(reminder => {
                       return (
                           <li key={reminder.id} className="list-group-item">
                               <div className="list-item">
-                                  <div>{ reminder.text }</div>
-                                  <div><em>{ moment(new Date(reminder.dueDate)).fromNow() }</em></div>
+                                  <div>{ reminder.event }</div>
+                                  <div><em>{ moment(new Date(reminder.date)).fromNow() }</em></div>
                               </div>
                               <div
                                   className="list-item delete-button"
-                                  onClick={ (e) => this.deleteReminder(reminder.id)}
+                                  onClick={ () => this.deleteReminder(reminder.id)}
                               >&#x2715;
                               </div>
                           </li>
@@ -99,12 +97,6 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        reminders: state,
-    };
-}
-
 App.propTypes = {
     reminders: PropTypes.array.isRequired,
     addReminder: PropTypes.func.isRequired,
@@ -112,4 +104,4 @@ App.propTypes = {
     cleanReminders: PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, { addReminder, deleteReminder, cleanReminders })(App);
+export default App;

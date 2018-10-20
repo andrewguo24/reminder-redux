@@ -1,34 +1,55 @@
-import { ADD_REMINDER, DELETE_REMINDER, CLEAN_REMINDERS } from '../constants';
-import { bake_cookie, read_cookie } from 'sfcookies';
+import { ADD_REMINDER, DELETE_REMINDER, CLEAN_REMINDERS, RECEIVE_DATA, REQUEST_DATA, REQUEST_FAILED } from "../constants";
 
-const reminder = (action) => {
-    const { text, dueDate } = action;
-    return {
-        text,
-        dueDate,
-        id: Math.random()
-    }
-};
+const initialState = {
+    data: [],
+    isFetching: false,
+    showError: false
+}
 
-const reminders = ( state = read_cookie("reminders") || [], action = {} ) => {
-    let reminders = null;
+const reminders = ( state = initialState, action = {} ) => {
     switch(action.type) {
         case ADD_REMINDER:
-            reminders = [
+            return {
                 ...state,
-                reminder(action)
-            ];
-            bake_cookie("reminders", reminders);
-            return reminders;
+                data: state.data.concat({
+                    id: state.data.length,
+                    date: action.date,
+                    event: action.event
+                })
+            };
+
         case DELETE_REMINDER:
-            reminders = state.filter(reminder => reminder.id !== action.id);
-            bake_cookie("reminders", reminders);
-            return reminders;
+            const data = state.data.filter((item) => item.id !== action.id)
+            return {
+                ...state,
+                data
+            };
+
         case CLEAN_REMINDERS:
-            reminders = [];
-            bake_cookie("reminders", reminders);
-            return reminders;
-        default: return state;
+            return initialState;
+
+        case REQUEST_DATA:
+            return {
+                ...state,
+                isFetching: true
+            };
+
+        case RECEIVE_DATA:
+            return {
+                ...state,
+                isFetching: false,
+                data: action.data.data
+            };
+
+        case REQUEST_FAILED:
+            return {
+                ...state,
+                isFetching: false,
+                showError: true
+            };
+
+        default:
+            return state;
     }
 };
 
