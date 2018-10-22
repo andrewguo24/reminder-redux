@@ -23,11 +23,11 @@ class App extends Component {
   }
 
   deleteReminder(id) {
-      this.props.deleteReminder(id);
+      this.props.deleteReminder && this.props.deleteReminder(id);
   }
 
   addReminder() {
-      this.props.addReminder(this.state.event, this.state.date);
+      this.props.addReminder && this.props.addReminder(this.state.event, this.state.date);
   }
 
   cleanReminders() {
@@ -64,22 +64,22 @@ class App extends Component {
       <div className="App">
           <div className="title">Reminder Pro</div>
           <div className="form-inline">
-              <div className="form-group mr-2">
+              <div className="form-group">
                   <input
                       type="text"
-                      className="form-control mr-2"
+                      className="form-control input-field"
                       placeholder="Please enter ..."
                       onChange={ (e) => {this.handleInput(e)}}
                   />
                   <input
                       type="datetime-local"
-                      className="form-control mr-2"
+                      className="form-control input-field"
                       onChange={ (e) => {this.handleDate(e)}}
                   />
               </div>
               <button
                   type="button"
-                  className="btn btn-success"
+                  className="btn add-btn"
                   onClick={(e) => {this.addReminder(e)}}
               >
                Add Reminder
@@ -87,10 +87,10 @@ class App extends Component {
           </div>
           { this.renderReminders() }
           <div
-              className="btn btn-danger mt-3"
+              className="btn-container"
               onClick={() => this.cleanReminders() }
           >
-              Clear Reminder
+              <button className="btn clear-btn">Clear Reminder</button>
           </div>
       </div>
     );

@@ -33,8 +33,6 @@ const mapStateToProps = ({ data, isFetching, showError }) => ({
     showError
 });
 
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators(actionCreators, dispatch);
-};
+const mapDispatchToProps = dispatch => bindActionCreators(actionCreators, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

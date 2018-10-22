@@ -1,4 +1,11 @@
-import { ADD_REMINDER, DELETE_REMINDER, CLEAN_REMINDERS, RECEIVE_DATA, REQUEST_DATA, REQUEST_FAILED } from "../constants";
+import {
+    ADD_REMINDER,
+    DELETE_REMINDER,
+    CLEAN_REMINDERS,
+    RECEIVE_DATA,
+    REQUEST_DATA,
+    REQUEST_FAILED
+} from "../constants";
 
 const initialState = {
     data: [],
@@ -11,15 +18,15 @@ const reminders = ( state = initialState, action = {} ) => {
         case ADD_REMINDER:
             return {
                 ...state,
-                data: state.data.concat({
-                    id: state.data.length,
+                data: state.data.concat({   //concat adding new items but doesn't change the original array and return new array
                     date: action.date,
+                    id: state.data.length,  //id equal to length of the data array
                     event: action.event
                 })
             };
 
         case DELETE_REMINDER:
-            const data = state.data.filter((item) => item.id !== action.id)
+            const data = state.data.filter((item) => item.id !== action.id)   //Use filter() method to delete
             return {
                 ...state,
                 data

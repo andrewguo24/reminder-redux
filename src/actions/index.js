@@ -1,4 +1,11 @@
-import { ADD_REMINDER, DELETE_REMINDER, CLEAN_REMINDERS, RECEIVE_DATA, REQUEST_DATA, REQUEST_FAILED } from "../constants";
+import {
+    ADD_REMINDER,
+    DELETE_REMINDER,
+    CLEAN_REMINDERS,
+    RECEIVE_DATA,
+    REQUEST_DATA,
+    REQUEST_FAILED
+} from "../constants";
 
 export const addReminder = (event, date) => ({
     type: ADD_REMINDER,
@@ -29,12 +36,10 @@ export const requestFailed = () => ({
     type: REQUEST_FAILED,
 });
 
-
 export const fetchData = () => async (dispatch) => {
     try {
         dispatch(requestData());
-        const response = await fetch('./local.json')
-        if (!response.ok) throw 'Response not OK'
+        const response = await fetch('./local.json')  //this json file is a local file, but the real one should be an url
         const json = await response.json();
         dispatch(receiveData(json))
     } catch (e) {
